@@ -12,7 +12,7 @@ public class Pessoa extends BaseEntity<Long> {
     private Long idPessoa;
 
     @Column(nullable = false, length = 200)
-    private String nomeEmpreendedor;
+    private String nome;
 
     @Override
     public Long getId() {

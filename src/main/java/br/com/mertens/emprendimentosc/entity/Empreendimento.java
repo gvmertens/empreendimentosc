@@ -10,15 +10,15 @@ public class Empreendimento extends BaseEntity<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idEmpreendimento;
 
+    @Column(length = 14, unique = true)
+    private String cnpj;
+
     @Column(nullable = false, length = 200)
     private String nomeEmpreendimento;
 
-    @Column(nullable = false, length = 200)
-    private String nomeEmpreendedorResponsavel;
-
-    @JoinColumns({@JoinColumn(name = "id_pessoa", referencedColumnName = "id_pessoa")})
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Pessoa empreendedorResponsavel;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "empreendedor_id", nullable = false)
+    private Pessoa empreendedor;
 
     @Override
     public Long getId() {

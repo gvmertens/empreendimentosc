@@ -36,6 +36,10 @@ public class PessoaService {
         return pessoaRepository.findById(id).map(this::convertPessoaToDTO).orElse(null);
     }
 
+    public Pessoa buscarPessoaEntityPorId(Long id) {
+        return pessoaRepository.findById(id).orElse(null);
+    }
+
     @Transactional
     public PessoaResponseDTO atualizar(Long id, PessoaRequestDTO req) {
         Optional<Pessoa> optionalPessoa = pessoaRepository.findById(id);

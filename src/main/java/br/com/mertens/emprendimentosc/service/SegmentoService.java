@@ -2,6 +2,7 @@ package br.com.mertens.emprendimentosc.service;
 
 import br.com.mertens.emprendimentosc.dto.segmento.SegmentoRequestDTO;
 import br.com.mertens.emprendimentosc.dto.segmento.SegmentoResponseDTO;
+import br.com.mertens.emprendimentosc.entity.Pessoa;
 import br.com.mertens.emprendimentosc.entity.Segmento;
 import br.com.mertens.emprendimentosc.exception.NotFoundException;
 import br.com.mertens.emprendimentosc.repository.SegmentoRepository;
@@ -34,6 +35,10 @@ public class SegmentoService {
 
     public SegmentoResponseDTO buscarPorId(Long id) {
         return segmentoRepository.findById(id).map(this::convertSegmentoToDTO).orElse(null);
+    }
+
+    public Segmento buscarSegmentoEntityPorId(Long id) {
+        return segmentoRepository.findById(id).orElse(null);
     }
 
     @Transactional

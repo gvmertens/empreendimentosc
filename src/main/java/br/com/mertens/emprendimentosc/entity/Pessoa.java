@@ -1,9 +1,13 @@
 package br.com.mertens.emprendimentosc.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Entity
 @Table(name = "pessoas")
+@Data
+@EqualsAndHashCode(of = "idPessoa", callSuper = false)
 public class Pessoa extends BaseEntity<Long> {
 
     @Id

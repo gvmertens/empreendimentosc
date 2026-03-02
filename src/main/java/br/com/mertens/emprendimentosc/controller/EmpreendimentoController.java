@@ -2,6 +2,7 @@ package br.com.mertens.emprendimentosc.controller;
 
 import br.com.mertens.emprendimentosc.dto.empreendimento.EmpreendimentoRequestDTO;
 import br.com.mertens.emprendimentosc.dto.empreendimento.EmpreendimentoResponseDTO;
+import br.com.mertens.emprendimentosc.enums.DominioAtivoInativo;
 import br.com.mertens.emprendimentosc.service.EmpreendimentoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -30,8 +31,8 @@ public class EmpreendimentoController {
 
     @GetMapping
     @Operation(summary = "Lista todas os empreendimentos")
-    public List<EmpreendimentoResponseDTO> listar() {
-        return empreendimentoService.listar();
+    public List<EmpreendimentoResponseDTO> listar(@RequestParam(name = "status", required = false) DominioAtivoInativo status) {
+        return empreendimentoService.listar(status);
     }
 
     @PostMapping
@@ -53,4 +54,15 @@ public class EmpreendimentoController {
     public void remover(@PathVariable Long id) {
         empreendimentoService.remover(id);
     }
+
+    @PatchMapping("/{id}/ativar")
+    public EmpreendimentoResponseDTO ativar(@PathVariable Long id) {
+        return empreendimentoService.ativar(id);
+    }
+
+    @PatchMapping("/{id}/inativar")
+    public EmpreendimentoResponseDTO desativar(@PathVariable Long id) {
+        return empreendimentoService.desativar(id);
+    }
+
 }

@@ -43,8 +43,11 @@ public class EmpreendimentoService {
         return convertEmpreendimentoToDTO(e);
     }
 
-    public List<EmpreendimentoResponseDTO> listar() {
-        return empreendimentoRepository.findAll().stream().map(this::convertEmpreendimentoToDTO).toList();
+    public List<EmpreendimentoResponseDTO> listar(DominioAtivoInativo status) {
+        List<Empreendimento> lista = (status == null)
+                ? empreendimentoRepository.findAll()
+                : empreendimentoRepository.findAllByStatus(status);
+        return lista.stream().map(this::convertEmpreendimentoToDTO).toList();
     }
 
     public EmpreendimentoResponseDTO buscarPorId(Long id) {
@@ -86,6 +89,28 @@ public class EmpreendimentoService {
         empreendimentoRepository.deleteById(id);
     }
 
+    @Transactional
+    public EmpreendimentoResponseDTO ativar(Long id) {
+        Empreendimento e = empreendimentoRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Empreendimento não encontrado: id=" + id));
+
+        e.setStatus(DominioAtivoInativo.ATIVO);
+        e = empreendimentoRepository.save(e);
+
+        return convertEmpreendimentoToDTO(e);
+    }
+
+    @Transactional
+    public EmpreendimentoResponseDTO desativar(Long id) {
+        Empreendimento e = empreendimentoRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Empreendimento não encontrado: id=" + id));
+
+        e.setStatus(DominioAtivoInativo.INATIVO);
+        e = empreendimentoRepository.save(e);
+
+        return convertEmpreendimentoToDTO(e);
+    }
+
     private Pessoa resolverEmpreendedor(EmpreendimentoRequestDTO dto) {
         Pessoa pessoaEntityPorId = pessoaService.buscarPessoaEntityPorId(dto.empreendedorId());
         if (pessoaEntityPorId == null) {
@@ -114,7 +139,7 @@ public class EmpreendimentoService {
     private String normalizarCnpj(String cnpj) {
         if (cnpj == null) return null;
         String trimmed = cnpj.trim();
-        return trimmed.isBlank() ? null : trimmed.replace(".", "").replace("/", "");
+        return trimmed.isBlank() ? null : trimmed.replace(".", "").replace("/", "").replace("-", "");
     }
 
     private void populaDadosEmpreendimento(EmpreendimentoRequestDTO req, Empreendimento emp, Pessoa empreendedor, Segmento segmento) {
